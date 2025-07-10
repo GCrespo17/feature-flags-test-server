@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  # Servidor NestJS
+  nestjs-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - DATABASE_URL=mongodb://mongodb:27017/feature-flags-db
+      - MONGO_HOST=mongodb
+      - MONGO_PORT=27017
+      - MONGO_DATABASE=feature-flags-db
+      - MONGO_USERNAME=admin
+      - MONGO_PASSWORD=password
+      - FEATURE_FLAGS_ENVIRONMENT=dev
+      - FEATURE_FLAGS_ENABLED_USERS=admin,testuser, user
+      - JWT_SECRET=your-super-secret-jwt-key-here
+      - JWT_EXPIRES_IN=1h
+    depends_on:
+      - mongodb
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - ./data:/app/data  # Volumen para archivos de datos
+    networks:
+      - app-network
+
+  # Base de datos MongoDB
+  mongodb:
+    image: mongo:7.0
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_INITDB_DATABASE=feature-flags-db
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - app-network
+
+  # MongoDB Express (interfaz web para MongoDB)
+  mongo-express:
+    image: mongo-express:latest
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=password
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+      - ME_CONFIG_MONGODB_PORT=27017
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  app-network:
+    driver: bridge
