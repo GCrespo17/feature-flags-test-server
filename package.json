@@ -37,7 +37,7 @@
     "reflect-metadata": "^0.1.13",
     "xlsx": "^0.18.5",
     "nest-commander": "^3.12.0",
-    "feature-flags-nestjs-lib": "github:GCrespo17/feature-flags-nestjs-lib"
+    "feature-flags-nestjs-lib": "https://github.com/GCrespo17/feature-flags-nestjs-lib.git"
   },
   "peerDependencies": {
     "@nestjs/common": "^10.0.0",
