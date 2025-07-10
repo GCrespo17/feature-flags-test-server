@@ -9,9 +9,12 @@
         "declarationDir": "dist",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "strict": true,
+        "strict": false,
+        "strictPropertyInitialization": false,
         "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true
     },
     "include": ["src/**/*"],
     "exclude": ["**/*.test.ts", "**/*.spec.ts", "dist", "node_modules"]

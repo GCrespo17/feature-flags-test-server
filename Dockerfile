@@ -1,24 +1,21 @@
-# Usa una imagen base de Node.js ligera y reciente
 FROM node:22-alpine
+
+# Instalar git para poder clonar desde GitHub
+RUN apk add --no-cache git
 
 # Establecer el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
 # Copiar los archivos de manifiesto de dependencias primero para aprovechar el cache de Docker
-# Esto asegura que las dependencias solo se reinstalen si package.json o package-lock.json cambian
 COPY package.json ./
 
-# 'npm ci' requiere este archivo para instalaciones determinísticas.
-COPY package-lock.json ./
-
-# Limpiar el caché de npm antes de instalar para evitar problemas de caché corruptos
-# Luego, instalar las dependencias de forma limpia y confiable
-RUN npm cache clean --force && npm ci
+# Limpiar caché e instalar dependencias
+RUN npm cache clean --force && npm install --verbose
 
 # Copiar el resto del código fuente de la aplicación
 COPY . .
 
-# Crear un directorio para datos si es necesario (ajusta según tu aplicación)
+# Crear un directorio para datos si es necesario
 RUN mkdir -p /app/data
 
 # Compilar la aplicación TypeScript
