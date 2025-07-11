@@ -7,7 +7,7 @@ RUN apk add --no-cache git
 WORKDIR /app
 
 # Copiar los archivos de manifiesto de dependencias primero para aprovechar el cache de Docker
-COPY package.json ./
+COPY package.json package-lock.json* ./
 
 # Limpiar caché e instalar dependencias
 RUN npm cache clean --force && npm install --verbose
